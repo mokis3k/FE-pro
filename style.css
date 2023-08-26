@@ -1,31 +1,32 @@
 @font-face {
-    font-family: "Raleway";
-    src: url("./fonts/Raleway/Raleway-Regular.woff2") format("woff2");
-    font-weight: 400;
+  font-family: "Raleway";
+  src: url("./fonts/Raleway/Raleway-Regular.woff2") format("woff2");
+  font-weight: 400;
 }
 
 * {
-    padding: 0;
-    margin: 0;
-    font-family: "Raleway";
+  padding: 0;
+  margin: 0;
+  font-family: "Raleway";
 }
 
-.color-circles, .color-names {
-    display: flex;
-    flex-direction: row;
-    margin-top: 10px;
+.color-circles,
+.color-names {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
 }
 
 .color {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-left: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-left: 20px;
 }
 
 .name {
-    display: block;
-    text-align: center;
-    width: 60px;
-    margin-left: 20px;
+  display: block;
+  text-align: center;
+  width: 60px;
+  margin-left: 20px;
 }
