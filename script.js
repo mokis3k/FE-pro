@@ -19,7 +19,9 @@ function renderItems(arr) {
 function timeLoop(item, coef) {
 
     setTimeout(function(){
-        console.log(item);
+        document.write(`
+        <p>${item}</p>
+        `);
     },
     coef * 1000
     );
