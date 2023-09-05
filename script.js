@@ -16,17 +16,42 @@ console.log(arr2)
 
 // arr3 for array with .filter()
 let arr3 = users.filter((item) => item[1] === `red`)
-console.log(arr3)
 
+// Total Score Red team
 let totalScore = arr3.reduce((returnedValue, item) => {
     return returnedValue += item[2]
 }, 0
 );
-console.log(totalScore)
 
 
+// Render Table 
+let THead = [`<tr><th>Name</th><th>Comand</th><th>Score</th><th>Data</th></tr>`];
+let TFoot = [`<tr><td colspan="4">Total score: ${totalScore}</td></tr>`];
+let TDs = []
 
-// let mapResult = arr.map((item, index, arr) => item*2);
-// console.log(mapResult);
+arr3.forEach((item) => {
+    item.forEach((itemInner, index) => {
+        if (index === 0) {
+            TDs.push(`<tr><td>${itemInner}</td>`)
+        } else if (index === item.length-1){
+            TDs.push(`<td>${itemInner}</td></tr>`)
+        } else {
+            TDs.push(`<td>${itemInner}</td>`)
+        }
+    })
+});
 
-// arr.forEach((item) => document.write(`<p>${item}</p>`));
+
+// -------------------------------
+document.write(`
+    <table>
+        <thead>
+            ${THead}
+        </thead>
+        <tbody>
+            ${TDs.join(``)}
+        </tbody>
+        <tfoot>
+            ${TFoot}
+        </tfoot>
+    </table>`)
