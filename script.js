@@ -77,40 +77,31 @@ let totalPrice = (arr, promo) => (
 // -----Rendering table----- 
 let renderThead = arr => `<tr><th>${arr.join(`</th><th>`)}</th></tr>`;
 
-// let renderTbody = arr => {
+let renderTbody = arr => {
+    let TRs = arr.map((item) => {
+        return `
+        <tr>
+            <td>${item.title}</td>
+            <td>${item.price}$</td>
+            <td>${item.discountPercentage}%</td>
+            <td>${item.rating}</td>
+        </tr>`
+    }).join(``);
 
-//     arr = arr.map(product => Object.keys(product).filter(key => product[key] !== `id`))
-
-//     let TRs = arr
-//         .map(product => {
-//             `<td>${for (let key in product) {
-//             if (product[key] === `price`) {
-//                 `<td>${product[key]}$</td>`
-//             } else {
-//                 `<td>${product[key]}</td>`
-//             }
-//         }}<td>`
-//     })
-
-//     let TRs = arr.map(product => `<tr>${Object
-//         .keys(product)
-//         .map(key => `<td>${product[key]}</td>`).join(``)}</tr>`)
-//     return TRs.join(``);
-// }
+    return TRs
+}
 
 let renderTfoot = (arr, promo) => (`
-    <tfoot>
-        <tr>
-            <td colspan="4">Final price: ${totalPrice(arr, promo)}$</td>
-        </tr>
-    </tfoot>
+    <tr>
+        <td colspan="4">Final price: ${totalPrice(arr, promo)}$</td>
+    </tr>
 `)
 
-let renderTable = (arr, promo, ratingSort) => {
+let renderProductsTable = (arr, promo, ratingSort) => {
     arr = JSON.parse(JSON.stringify(arr));
 
     if (ratingSort) {
-        arr.sort((x, y) => x.rating - y.rating);
+        arr.sort((x, y) => y.rating - x.rating);
     }
 
     document.write(`
@@ -133,4 +124,4 @@ let renderTable = (arr, promo, ratingSort) => {
 let userPromo = promoCheck(prompt(`Enter promo:`));
 let userSort = confirm(`Sort products by rating?`);
 
-renderTable(PRODUCTS, userPromo, userSort)
+renderProductsTable(PRODUCTS, userPromo, userSort)
