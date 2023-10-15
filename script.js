@@ -80,17 +80,40 @@ const createTbody = (obj) => {
     const hours = getHours(obj.hours);
 
     hours.forEach(hour => {
-        tr = document.createElement(`tr`);
-        
+        const tr = document.createElement(`tr`);
+        const td = document.createElement(`td`);
+
+        td.innerHTML = `${hour}:00`;
+        tr.append(td);
+
+        obj.days.forEach(day => {
+          const td = document.createElement(`td`);
+          const todo = obj.todo.find(obj.todos.day === day && obj.todos.hour === hour);
+
+          if (todo) {
+            td.append(createTodo(todo.title));
+          }
+
+          tr.append(td);
+        })
+
+        tbody.append(tr);
     })
+    return tbody;
+};
+
+
+const renderTable = (obj) => {
+  const table = document.createElement(`table`);
+  const thead = document.createThead(obj);
+  const tbody = document.createTbody(obj);
+
+  tbody.append(thead, tbody)
 }
 
 
 const container = document.querySelector(`#container`);
 
-const table = document.createElement(`table`)
-const tbody = document.createElement(`tbody`);
+const renderedTable = renderTable(calendarData);
 
-container.append(table)
-table.append(tbody);
-tbody.append(createThead(calendarData));
+container.append(renderedTable);
