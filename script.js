@@ -37,20 +37,22 @@ const calendarData = {
 const getHours = (hours) => {
     let startHour = hours.start;
     let endHour = hours.end;
-    let hours = [];
+    let hoursList = [];
 
     for (; startHour <= endHour; startHour++) {
-        hours.push(startHour);
+      hoursList.push(startHour);
     }
 
-    return hours
+    return hoursList
 };
 
 
 const createTodo = (title) => {
     const todo = document.createElement(`div`);
     const todoTitle = document.createElement(`h3`);
-    const todoBtn = document.createElement(`btn`);
+    todoTitle.classList.add(`todo__title`)
+    const todoBtn = document.createElement(`button`);
+    todoBtn.classList.add(`todo__button`)
 
     todoTitle.innerHTML = title;
     todoBtn.innerHTML = `Delete`;
@@ -62,6 +64,10 @@ const createTodo = (title) => {
         todo.remove();
     })
 
+    todo.classList.add(`todo`)
+    todo.addEventListener(`click`, () => {
+      todo.classList.togle(`active`)
+    })
     todo.append(todoTitle, todoBtn);
 
     return todo
@@ -88,7 +94,7 @@ const createTbody = (obj) => {
 
         obj.days.forEach(day => {
           const td = document.createElement(`td`);
-          const todo = obj.todo.find(obj.todos.day === day && obj.todos.hour === hour);
+          const todo = obj.todos.find(item => item.day === day && item.hour === hour);
 
           if (todo) {
             td.append(createTodo(todo.title));
@@ -105,10 +111,11 @@ const createTbody = (obj) => {
 
 const renderTable = (obj) => {
   const table = document.createElement(`table`);
-  const thead = document.createThead(obj);
-  const tbody = document.createTbody(obj);
+  const thead = createThead(obj);
+  const tbody = createTbody(obj);
 
-  tbody.append(thead, tbody)
+  table.append(thead, tbody)
+  return table
 }
 
 

@@ -1,11 +1,37 @@
-* {
-    margin: 0;
-};
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
 
-table {
-    border-collapse: collapse;
+* {
+  margin: 0;
+  font-weight: 400;
+  font-size: 18px;
+  font-family: "Lato", sans-serif;
 }
 
-tr, td {
-    border: 1px solid black;
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+  margin: 10px;
+}
+
+tr,
+td,
+th {
+  border: 1px solid black;}
+
+.todo {
+  border-radius: 5%;
+  background-color: #e6e6e6;
+  margin: 5px;
+  padding: 5px;
+  transition: .1s;
+}
+.todo.active {
+    background-color: #f74851;
+    color: #fff;
+}
+.todo__title {
+  font-size: 15px;
+}
+.todo__button {
+  font-size: 12px;
 }
