@@ -1,0 +1,44 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+}
+
+table {
+  width: fit-content;
+  border-collapse: collapse;
+}
+
+tr,
+td,
+th {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+thead,
+tfoot {
+  font-weight: 700;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroes__form {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  border: 1px solid black;
+}
+
+.heroes__form * {
+  margin: 5px;
+}
+
+.heroes__table {
+  margin: 0 20px;
+}
