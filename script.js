@@ -68,16 +68,40 @@ heroesForm.addEventListener(`submit`, async (e) => {
   let formData = new FormData(e.target);
   formData = Object.fromEntries(formData.entries());
   const newHero = { ...formData, favourite: formData.favourite ? true : false };
-  console.log(newHero)
-  if (heroesNameList.includes(newHero.name)) {
+  let nameList = heroesNameList.map((hero) => hero.name);
+  if (nameList.includes(newHero.name)) {
     console.log(`This hero already exists.`);
   } else {
-    let postResponse = await heroesRest(`POST`, `heroes`, newHero);
-    console.log(postResponse);
-    renderTable();
+    e.target.disable = true;
+    let table = document.querySelector(`#heroesTable`);
+    await heroesRest(`POST`, `heroes`, undefined, newHero);
+    // newHero = heroesRest(`GET`)
+    let tr = createTr(newHero);
+    heroesNameList.push(newHero);
+    table.append(tr);
     e.target.reset();
   }
 });
+
+// -----Creating tr-----
+const createTr = (hero) => {
+  let tr = document.createElement("tr");
+  Object.keys(hero)
+    .filter((key) => key !== `id`)
+    .forEach((key) => {
+      if (key === `favourite`) {
+        let td = createFavouriteTd(hero, key);
+        tr.append(td);
+      } else {
+        let td = createDefaultTd(hero, key);
+        tr.append(td);
+      }
+    });
+  let td = createActionsTd(hero);
+  tr.append(td);
+
+  return tr;
+};
 
 // -----Creating td Default-----
 const createDefaultTd = (hero, key) => {
@@ -100,20 +124,23 @@ const createFavouriteTd = (hero, key) => {
 };
 
 // -----Creating td With Delete Button-----
-const createActionsTd = (heroID) => {
+const createActionsTd = (hero) => {
   let td = document.createElement(`td`);
   let actionBtn = document.createElement(`button`);
   actionBtn.innerHTML = `Delete`;
-  actionBtn.addEventListener(`click`, (e) => deleteButtonHandler(e, heroID));
+  actionBtn.addEventListener(`click`, (e) => deleteButtonHandler(e, hero));
+  console.log(hero);
   td.append(actionBtn);
   return td;
 };
 
 // -----Delete Button Handler------
-const deleteButtonHandler = async (e, heroID) => {
+const deleteButtonHandler = async (e, hero) => {
   e.target.disabled = true;
-  deletedHero = await heroesRest(`DELETE`, `heroes`, heroID);
-  renderTable();
+  deletedHero = await heroesRest(`DELETE`, `heroes`, hero.id);
+  parentTable = e.target.closest(`#heroesTable`);
+  parentTr = e.target.closest(`tr`);
+  parentTr.remove();
 };
 
 // -----Favourite Checkbox------
@@ -148,21 +175,7 @@ const createTbody = (heroesArray) => {
   let tbody = document.createElement(`tbody`);
 
   heroesArray.forEach((hero) => {
-    let tr = document.createElement("tr");
-    Object.keys(hero)
-      .filter((key) => key !== `id`)
-      .forEach((key) => {
-        if (key === `favourite`) {
-          let td = createFavouriteTd(hero, key);
-          tr.append(td);
-        } else {
-          let td = createDefaultTd(hero, key);
-          tr.append(td);
-        }
-      });
-    let td = createActionsTd(hero.id);
-    tr.append(td);
-
+    let tr = createTr(hero);
     tbody.append(tr);
   });
 
@@ -183,8 +196,10 @@ const renderComicsOptions = async () => {
 // -----Rendering Heroes Table-----
 const renderTable = async () => {
   let heroes = await heroesRest(`GET`, `heroes`);
-  heroesNameList = heroes.map((hero) => hero.name);
+  heroesNameList = heroes.map((hero) => hero);
+  console.log(heroesNameList);
   let table = document.createElement(`table`);
+  table.setAttribute(`id`, `heroesTable`);
   table.className = `heroes__table`;
   let tbody = createTbody(heroes);
   let thead = createThead();

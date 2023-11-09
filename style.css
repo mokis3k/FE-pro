@@ -4,6 +4,10 @@
   font-family: "Montserrat", sans-serif;
 }
 
+body {
+  background-color: #daf7a6;
+}
+
 table {
   width: fit-content;
   border-collapse: collapse;
@@ -12,8 +16,26 @@ table {
 tr,
 td,
 th {
-  border: 1px solid black;
+  border: 1px solid #BFC1BC;
   padding: 5px;
+}
+
+td {
+  text-align: center;
+}
+
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+}
+
+button {
+  border: none;
+  background-color: #9CBB64;
+  color: #fff;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 5px;
 }
 
 thead,
@@ -32,7 +54,9 @@ tfoot {
   display: flex;
   flex-direction: column;
   margin: 20px;
-  border: 1px solid black;
+  border: 1px solid #BFC1BC;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 .heroes__form * {
@@ -41,4 +65,6 @@ tfoot {
 
 .heroes__table {
   margin: 0 20px;
+  background-color: #FFFFFF;
+  border: 2px solid #BFC1BC;
 }
