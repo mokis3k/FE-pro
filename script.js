@@ -3,7 +3,7 @@ const THEADTITLES = [`Name`, `Comics`, `Favourite`, `Actions`];
 const TABLECONTAINER = document.querySelector(`#heroesTableContainer`);
 const heroesForm = document.querySelector(`#heroesForm`);
 const comicsSelect = document.querySelector(`#comicsSelect`);
-let heroesNameList;
+let heroesList;
 
 // -----REST Placeholders-----
 const JSONPLACEHOLDER_REST = {
@@ -65,23 +65,35 @@ const heroesRest = async (method, path, id, obj) => {
 // -----New Hero Form-----
 heroesForm.addEventListener(`submit`, async (e) => {
   e.preventDefault();
+
   let formData = new FormData(e.target);
   formData = Object.fromEntries(formData.entries());
-  const newHero = { ...formData, favourite: formData.favourite ? true : false };
-  let nameList = heroesNameList.map((hero) => hero.name);
+
+  let newHero = { ...formData, favourite: formData.favourite ? true : false };
+
+  let nameList = heroesList.map((hero) => hero.name);
   if (nameList.includes(newHero.name)) {
     console.log(`This hero already exists.`);
   } else {
     e.target.disable = true;
     let table = document.querySelector(`#heroesTable`);
-    await heroesRest(`POST`, `heroes`, undefined, newHero);
-    // newHero = heroesRest(`GET`)
-    let tr = createTr(newHero);
-    heroesNameList.push(newHero);
-    table.append(tr);
+    const newHeroTr = await createNewHeroTr(newHero);
+
+    table.append(newHeroTr);
     e.target.reset();
   }
 });
+
+// -----Creating New Hero-----
+const createNewHeroTr = async (hero) => {
+  await heroesRest(`POST`, `heroes`, undefined, hero);
+  hero = (await heroesRest(`GET`, `heroes`)).find(
+    (heroInner) => heroInner.name === hero.name
+  );
+  let tr = createTr(hero);
+  heroesList.push(hero);
+  return tr;
+};
 
 // -----Creating tr-----
 const createTr = (hero) => {
@@ -129,7 +141,6 @@ const createActionsTd = (hero) => {
   let actionBtn = document.createElement(`button`);
   actionBtn.innerHTML = `Delete`;
   actionBtn.addEventListener(`click`, (e) => deleteButtonHandler(e, hero));
-  console.log(hero);
   td.append(actionBtn);
   return td;
 };
@@ -137,10 +148,11 @@ const createActionsTd = (hero) => {
 // -----Delete Button Handler------
 const deleteButtonHandler = async (e, hero) => {
   e.target.disabled = true;
-  deletedHero = await heroesRest(`DELETE`, `heroes`, hero.id);
+  await heroesRest(`DELETE`, `heroes`, hero.id);
   parentTable = e.target.closest(`#heroesTable`);
   parentTr = e.target.closest(`tr`);
   parentTr.remove();
+  heroesList = heroesList.filter((innerHero) => innerHero !== hero);
 };
 
 // -----Favourite Checkbox------
@@ -196,11 +208,12 @@ const renderComicsOptions = async () => {
 // -----Rendering Heroes Table-----
 const renderTable = async () => {
   let heroes = await heroesRest(`GET`, `heroes`);
-  heroesNameList = heroes.map((hero) => hero);
-  console.log(heroesNameList);
+  heroesList = heroes.map((hero) => hero);
+
   let table = document.createElement(`table`);
   table.setAttribute(`id`, `heroesTable`);
   table.className = `heroes__table`;
+
   let tbody = createTbody(heroes);
   let thead = createThead();
 
